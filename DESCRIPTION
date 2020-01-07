@@ -1,5 +1,5 @@
 Package: ozmaps
-Version: 0.2.0
+Version: 0.3.0
 Title: Australia Maps
 Description: Maps of Australian coastline and administrative regions. Data 
  can be drawn or accessed directly as simple features objects. Includes
@@ -21,15 +21,16 @@ LazyData: true
 ByteCompile: true
 Depends: R (>= 3.3.0)
 Imports: oz, tibble
-Suggests: paletteer, testthat, covr
-RoxygenNote: 6.1.1
+Suggests: paletteer (>= 0.2.1), testthat, covr, knitr, rmarkdown
+RoxygenNote: 7.0.2
 URL: https://github.com/mdsumner/ozmaps
 BugReports: https://github.com/mdsumner/ozmaps/issues
+VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2019-11-05 11:00:01 UTC; mdsumner
+Packaged: 2020-01-07 06:57:18 UTC; mdsumner
 Author: Michael Sumner [aut, cre],
   Dianne Cook [ctb],
   Edzer Pebesma [ctb] (sf plot)
 Maintainer: Michael Sumner <mdsumner@gmail.com>
 Repository: CRAN
-Date/Publication: 2019-11-06 16:20:02 UTC
+Date/Publication: 2020-01-07 07:20:02 UTC

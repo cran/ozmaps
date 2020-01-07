@@ -18,7 +18,13 @@ The goal of ozmaps is to get maps of Australia to plot\!
 
 # Installation
 
-ozmaps may be installed directly from github.
+Install from CRAN with
+
+``` r
+install.packages("ozmaps")
+```
+
+The development version of ozmaps may be installed directly from github.
 
 ``` r
 devtools::install_github("mdsumner/ozmaps")
@@ -41,7 +47,7 @@ library(ozmaps)
 ozmap()
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+<img src="man/figures/README-ozmap-1.png" width="100%" />
 
 Plot Australia without states.
 
@@ -49,7 +55,7 @@ Plot Australia without states.
 ozmap(x = "country")
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-country-1.png" width="100%" />
 
 Add to an existing plot.
 
@@ -58,7 +64,7 @@ plot(quakes[c("long", "lat")], xlim = c(120, 190))
 ozmap(add = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-add-plot-1.png" width="100%" />
 
 Obtain the data used in `sf` form.
 
@@ -84,30 +90,34 @@ Plot with a custom palette.
 
 ``` r
 library(sf)
-nmjr <- colorRampPalette(paletteer::paletteer_d(package = "ochRe", palette = "namatjira_qual"))(nrow(sf_oz))
+if (utils::packageVersion("paletteer") < '1.0.0') {
+ pal <- paletteer::paletteer_d(package = "ochRe", palette = "namatjira_qual")
+} else {
+  pal <- paletteer::paletteer_d(palette = "ochRe::namatjira_qual")
+} 
+opal <- colorRampPalette(pal)
+nmjr <- opal(nrow(sf_oz))
 plot(st_geometry(sf_oz), col = nmjr)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-ochRe-1.png" width="100%" />
 
 ``` r
 
-## soon...plot directly with ggplot2
+## plot directly with ggplot2
 library(ggplot2)
 ggplot(sf_oz, aes(fill = NAME)) + geom_sf() + coord_sf(crs = "+proj=lcc +lon_0=135 +lat_0=-30 +lat_1=-10 +lat_2=-45 +datum=WGS84") + scale_fill_manual(values = nmjr)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-2.png" width="100%" />
+<img src="man/figures/README-ochRe-2.png" width="100%" />
 
-Plot the ABS layers (from
-2016).
+Plot the ABS layers (from 2016).
 
 ``` r
-opal <- colorRampPalette(paletteer::paletteer_d(package = "ochRe", palette = "namatjira_qual"))
 ozmap("abs_ced", col = opal(nrow(abs_ced)))
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/README-abs-1.png" width="100%" />
 
 ``` r
 
@@ -115,7 +125,39 @@ ozmap("abs_ced", col = opal(nrow(abs_ced)))
 ozmap("abs_ste", col = opal(nrow(abs_ste)))
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-2.png" width="100%" />
+<img src="man/figures/README-abs-2.png" width="100%" />
+
+## Resolution
+
+These ABS layers `abs_ced`, `abs_lga`, and `abs_ste` are derived from
+the 2016 sources and simplified using `rmapshaper::ms_simplify(, keep
+= 0.05, keep_shapes = TRUE)` so all the original polygons are there.
+There is sufficient detail to map many (most?) of the regions on their
+own, which was a major goal for this package.
+
+The cache of the source data at original resolution is available in
+[ozmaps.data](https://github.com/mdsumner/ozmaps.data/).
+
+Compare the detail of Bruny Island here in this box, compared with the
+very basic maps package layer.
+
+``` r
+library(dplyr)
+kbor <- abs_lga %>% dplyr::filter(grepl("Kingborough", NAME))
+bb <- st_bbox(kbor)
+
+layout(matrix(c(1, 1, 1, 2, 2, 2, 2, 2, 2), nrow = 3))
+plot(kbor, reset = FALSE, main = "Kingborough (TAS)")
+rect(bb["xmin"], bb["ymin"], bb["xmax"], bb["ymax"])
+library(mapdata)
+#> Loading required package: maps
+par(mar = rep(0, 4))
+plot(c(145, 148.5), c(-43.6, -40.8), type = "n", asp = 1/cos(mean(bb[c(2, 4)]) * pi/180), axes = FALSE, xlab = "", ylab = "")
+maps::map(database = "worldHires", regions = "australia", xlim = c(145, 148.5), ylim = c(-43.6, -40.8), add = TRUE)
+rect(bb["xmin"], bb["ymin"], bb["xmax"], bb["ymax"])
+```
+
+<img src="man/figures/README-detail-1.png" width="100%" />
 
 -----
 
