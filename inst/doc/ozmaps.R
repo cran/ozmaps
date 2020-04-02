@@ -22,7 +22,9 @@ ozmap(add = TRUE)
 ## ----sf-format----------------------------------------------------------------
 sf_oz <- ozmap_data("states")
 
-tibble::as_tibble(sf_oz)
+print(dim(sf_oz))
+
+print(names(sf_oz))
 
 ## ----ochRe--------------------------------------------------------------------
 if (utils::packageVersion("paletteer") < '1.0.0') {
