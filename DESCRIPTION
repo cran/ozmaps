@@ -1,5 +1,5 @@
 Package: ozmaps
-Version: 0.4.0
+Version: 0.4.5
 Title: Australia Maps
 Description: Maps of Australian coastline and administrative regions. Data 
  can be drawn or accessed directly as simple features objects. Includes
@@ -26,10 +26,10 @@ BugReports: https://github.com/mdsumner/ozmaps/issues
 VignetteBuilder: knitr
 LazyDataCompression: xz
 NeedsCompilation: no
-Packaged: 2021-04-08 01:47:10 UTC; mdsumner
+Packaged: 2021-08-02 22:06:26 UTC; mdsumner
 Author: Michael Sumner [aut, cre],
   Dianne Cook [ctb],
   Dario Herenu [ctb]
 Maintainer: Michael Sumner <mdsumner@gmail.com>
 Repository: CRAN
-Date/Publication: 2021-04-08 05:00:05 UTC
+Date/Publication: 2021-08-03 04:10:02 UTC
